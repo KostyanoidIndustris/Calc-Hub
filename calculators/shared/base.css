@@ -1,0 +1,329 @@
+/* ============================================================
+   CalcHub — базовая тема для автономных калькуляторов
+   Общие токены, фон, шапка, панели, поля и кнопки.
+   Каждый калькулятор лежит в своей папке и открывается напрямую.
+   ============================================================ */
+
+:root {
+  color-scheme: dark; /* нативные контролы (списки, скроллы) — в тёмной схеме */
+  --bg: #07070d;
+  --surface: rgba(255, 255, 255, 0.035);
+  --surface-hover: rgba(255, 255, 255, 0.06);
+  --border: rgba(255, 255, 255, 0.09);
+  --border-strong: rgba(255, 255, 255, 0.16);
+  --text: #e9ebf2;
+  --text-muted: #9aa1b5;
+  --text-faint: #6b7284;
+
+  --cyan: #22d3ee;
+  --indigo: #818cf8;
+  --fuchsia: #e879f9;
+
+  --grad: linear-gradient(120deg, #22d3ee 0%, #818cf8 50%, #e879f9 100%);
+  --radius: 20px;
+  --radius-sm: 12px;
+  --maxw: 1120px;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+button, a, input, .swatch, .color-sw, .shape-sw, .seg, .series-chip { touch-action: manipulation; }
+
+body {
+  font-family: "Segoe UI", "SF Pro Text", -apple-system, BlinkMacSystemFont, Roboto, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection { background: rgba(129, 140, 248, 0.4); color: #fff; }
+a { color: inherit; text-decoration: none; }
+
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(34,211,238,.5), rgba(232,121,249,.5));
+  border-radius: 8px;
+  border: 2px solid var(--bg);
+}
+
+/* ---------- Анимированный фон ---------- */
+.bg { position: fixed; inset: 0; z-index: -2; overflow: hidden; }
+.blob { position: absolute; border-radius: 50%; filter: blur(90px); opacity: .5; mix-blend-mode: screen; }
+.blob-1 { width: 520px; height: 520px; background: #1d4ed8; top: -160px; left: -120px; animation: drift1 26s var(--ease) infinite alternate; }
+.blob-2 { width: 460px; height: 460px; background: #7c3aed; top: 30%; right: -160px; animation: drift2 32s var(--ease) infinite alternate; }
+.blob-3 { width: 420px; height: 420px; background: #0e7490; bottom: -160px; left: 40%; animation: drift3 38s var(--ease) infinite alternate; }
+@keyframes drift1 { to { transform: translate(90px, 70px) scale(1.15); } }
+@keyframes drift2 { to { transform: translate(-80px, 60px) scale(1.1); } }
+@keyframes drift3 { to { transform: translate(60px, -60px) scale(1.2); } }
+
+.grid-overlay {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 90% 70% at 50% 0%, #000 40%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 0%, #000 40%, transparent 100%);
+}
+
+/* ---------- Шапка калькулятора ---------- */
+.calc-header {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 40px clamp(20px, 5vw, 40px) 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.back-link {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-muted);
+  font-size: .9rem;
+  font-weight: 500;
+  transition: color .2s, border-color .2s, transform .2s;
+}
+.back-link:hover { color: var(--text); border-color: var(--border-strong); transform: translateX(-3px); }
+
+/* При встраивании в CalcHub внутренняя кнопка «назад» скрывается —
+   навигацию обеспечивает оболочка приложения. */
+body.embedded .back-link { display: none; }
+
+.eyebrow {
+  font-family: "Cascadia Code", Consolas, monospace;
+  font-size: .82rem;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--cyan);
+  margin-bottom: 10px;
+}
+.calc-title {
+  font-size: clamp(1.9rem, 4.5vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+.grad-text {
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.calc-sub { color: var(--text-muted); max-width: 640px; font-size: 1.02rem; }
+
+/* ---------- Раскладка страницы ---------- */
+.calc-page {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 24px clamp(20px, 5vw, 40px) 90px;
+  display: grid;
+  gap: 22px;
+}
+
+/* ---------- Панели ---------- */
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 26px;
+}
+.panel-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.panel-hint { color: var(--text-faint); font-size: .88rem; margin-bottom: 18px; }
+
+/* ---------- Поля ---------- */
+.field-label {
+  display: block;
+  font-size: .9rem;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+.input, .select {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,.03);
+  color: var(--text);
+  font-size: 1rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color .2s, box-shadow .2s;
+}
+.input:focus, .select:focus {
+  border-color: rgba(129,140,248,.7);
+  box-shadow: 0 0 0 4px rgba(129,140,248,.15);
+}
+.select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239aa1b5' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 14px;
+  padding-right: 38px;
+  cursor: pointer;
+}
+/* Пункты выпадающего списка — тёмный фон и светлый текст */
+.select option {
+  background-color: #12131d;
+  color: var(--text);
+}
+.input::placeholder { color: var(--text-faint); }
+
+/* ---------- Кнопки ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 22px;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: .95rem;
+  font-family: inherit;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: transform .2s var(--ease), box-shadow .2s, background .2s, border-color .2s;
+}
+.btn-primary {
+  color: #fff;
+  background: var(--grad);
+  box-shadow: 0 10px 26px rgba(129,140,248,.35);
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 16px 34px rgba(129,140,248,.45); }
+.btn-ghost {
+  border-color: var(--border-strong);
+  color: var(--text);
+  background: var(--surface);
+}
+.btn-ghost:hover { background: var(--surface-hover); border-color: rgba(129,140,248,.6); }
+
+/* ---------- Сегментированный переключатель (вкладки) ---------- */
+.segmented {
+  display: flex;
+  gap: 6px;
+  padding: 5px;
+  border-radius: 16px;
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid var(--border);
+  box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.35);
+}
+.seg {
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 11px 16px;
+  border: none;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: .92rem;
+  font-weight: 600;
+  font-family: inherit;
+  line-height: 1.2;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  cursor: pointer;
+  transition: background .25s var(--ease), color .25s, box-shadow .25s;
+}
+.seg:hover { color: var(--text); background: rgba(255, 255, 255, 0.05); }
+.seg.active {
+  background: var(--grad);
+  color: #fff;
+  box-shadow: 0 8px 20px rgba(129, 140, 248, 0.4);
+}
+.seg.active:hover { background: var(--grad); color: #fff; }
+
+/* ---------- Общие блоки ---------- */
+.panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+.btn-sm { padding: 8px 14px; font-size: .85rem; }
+.actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 18px; }
+.status { min-height: 1.4em; margin-top: 12px; font-size: .9rem; color: var(--text-muted); }
+.status.ok { color: #34d399; }
+.status.err { color: #fda4af; }
+.table-wrap { overflow-x: auto; }
+
+.chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+.chip {
+  padding: 7px 15px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--text-muted);
+  font-family: "Cascadia Code", Consolas, monospace;
+  font-size: .9rem;
+  cursor: pointer;
+  transition: border-color .2s, color .2s, background .2s, transform .2s;
+}
+.chip:hover {
+  border-color: rgba(129, 140, 248, 0.6);
+  color: var(--text);
+  background: var(--surface-hover);
+  transform: translateY(-2px);
+}
+
+.tip {
+  padding: 16px 20px;
+  border-radius: var(--radius);
+  border: 1px solid rgba(129, 140, 248, 0.28);
+  background: rgba(129, 140, 248, 0.07);
+  color: var(--text-muted);
+  font-size: .9rem;
+}
+.tip strong { color: var(--text); }
+.tip ol, .tip ul { margin: 8px 0 0 18px; display: grid; gap: 4px; }
+
+/* ---------- Результат ---------- */
+.result-value {
+  font-size: clamp(2.2rem, 6vw, 3.4rem);
+  font-weight: 850;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  word-break: break-word;
+}
+.result-meta { color: var(--text-muted); font-size: 1rem; }
+
+/* ---------- Адаптивность ---------- */
+@media (max-width: 640px) {
+  .panel { padding: 20px; }
+  .calc-header { padding-top: 24px; }
+  .calc-page { padding-bottom: 60px; }
+  .seg { padding: 10px 6px; font-size: .78rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+  .blob { animation: none !important; }
+}
