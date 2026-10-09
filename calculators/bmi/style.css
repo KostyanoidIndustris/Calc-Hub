@@ -1,0 +1,210 @@
+/* ============================================================
+   Индекс массы тела — стили (тема «Здоровье»)
+   ============================================================ */
+
+/* Меняем акцент под тематику здоровья: зелёно-бирюзовая гамма */
+:root {
+  --grad: linear-gradient(120deg, #34d399 0%, #22d3ee 100%);
+  --health: #34d399;
+}
+.blob-1 { background: #047857; }
+.blob-2 { background: #0e7490; }
+.blob-3 { background: #10b981; }
+
+.bmi-page { max-width: 1060px; margin: 0 auto; }
+
+/* ---------- Раскладка ---------- */
+.bmi-layout {
+  display: grid;
+  grid-template-columns: 1fr 1.05fr;
+  gap: 22px;
+  align-items: start;
+}
+
+/* ---------- Поля ---------- */
+.bmi-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-top: 18px;
+}
+.opt {
+  color: var(--text-faint);
+  font-weight: 400;
+  font-size: .78rem;
+}
+
+/* Пол нормы — меняются при выборе пола */
+.sex-norms {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+.sn-item {
+  padding: 6px 13px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.22);
+  font-size: .84rem;
+  color: var(--text-muted);
+}
+.sn-item b { color: var(--health); font-family: "Cascadia Code", Consolas, monospace; }
+
+/* ---------- Результат ---------- */
+.bmi-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.bmi-label {
+  font-size: .82rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+.bmi-value {
+  font-family: "Cascadia Code", Consolas, monospace;
+  font-size: clamp(2.4rem, 7vw, 3.4rem);
+  font-weight: 850;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  color: var(--text);
+}
+.bmi-verdict {
+  margin-top: 4px;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+.bmi-cat {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 18px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: .95rem;
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+.bmi-cat .dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: currentColor;
+  flex-shrink: 0;
+}
+
+/* ---------- Шкала ---------- */
+.bmi-scale { margin: 22px 0 6px; }
+.scale-track {
+  position: relative;
+  display: flex;
+  height: 12px;
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+.scale-track .zone { display: block; }
+.z-under { flex: 3.5; background: #38bdf8; }
+.z-normal { flex: 6.5; background: #34d399; }
+.z-over { flex: 5; background: #fbbf24; }
+.z-obese { flex: 10; background: #f43f5e; }
+
+.scale-marker {
+  position: relative;
+  height: 0;
+}
+.scale-marker span {
+  position: absolute;
+  top: -21px;
+  width: 4px;
+  height: 20px;
+  margin-left: -2px;
+  border-radius: 2px;
+  background: #fff;
+  box-shadow: 0 0 0 2px rgba(7, 7, 13, .8), 0 0 12px rgba(255, 255, 255, .6);
+}
+.scale-ticks {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  font-family: "Cascadia Code", Consolas, monospace;
+  font-size: .72rem;
+  color: var(--text-faint);
+}
+
+/* ---------- Детали ---------- */
+.bmi-details {
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+  display: grid;
+  gap: 10px;
+}
+.bmi-placeholder { color: var(--text-faint); font-size: .95rem; }
+.detail-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 11px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.18);
+}
+.detail-row .d-name { color: var(--text-muted); font-size: .9rem; }
+.detail-row .d-val {
+  font-family: "Cascadia Code", Consolas, monospace;
+  font-weight: 700;
+  font-size: .98rem;
+  text-align: right;
+}
+.detail-row .d-sub {
+  display: block;
+  font-family: inherit;
+  font-weight: 400;
+  font-size: .76rem;
+  color: var(--text-faint);
+  margin-top: 2px;
+}
+.d-ok { color: #34d399; }
+.d-warn { color: #fbbf24; }
+.d-bad { color: #f43f5e; }
+.d-info { color: var(--cyan); }
+
+/* ---------- Таблица норм ---------- */
+.norms-table { width: 100%; border-collapse: collapse; font-size: .92rem; }
+.norms-table th, .norms-table td {
+  padding: 10px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+.norms-table th {
+  color: var(--text-faint);
+  font-weight: 600;
+  font-size: .75rem;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+.norms-table tbody tr:last-child td { border-bottom: none; }
+.norms-table .n-range {
+  font-family: "Cascadia Code", Consolas, monospace;
+  color: var(--text);
+  white-space: nowrap;
+}
+.norms-table tr.active { background: rgba(52, 211, 153, 0.1); }
+.norms-table tr.active .n-range { color: #34d399; }
+
+/* ---------- Подсказка ---------- */
+.tip ul { margin: 8px 0 0 18px; display: grid; gap: 5px; }
+.tip b { color: var(--text); }
+
+/* ---------- Адаптивность ---------- */
+@media (max-width: 900px) {
+  .bmi-layout { grid-template-columns: 1fr; }
+}
+@media (max-width: 440px) {
+  .bmi-fields { grid-template-columns: 1fr; }
+}

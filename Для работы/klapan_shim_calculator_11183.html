@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Калькулятор шайб клапанов ВАЗ-11183</title>
+  <style>
+    :root {
+      --bg: #0f1419;
+      --card: #1a2332;
+      --card-hover: #243044;
+      --accent: #3b82f6;
+      --accent-hover: #2563eb;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --border: #334155;
+      --input-bg: #0f172a;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.5;
+      padding: 20px;
+    }
+
+    .container { max-width: 960px; margin: 0 auto; }
+
+    header {
+      text-align: center;
+      margin-bottom: 24px;
+      padding: 24px 16px;
+      background: linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%);
+      border-radius: 16px;
+      border: 1px solid var(--border);
+    }
+
+    header h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+      letter-spacing: -0.02em;
+    }
+
+    header p { color: var(--text-muted); font-size: 0.95rem; }
+
+    /* Settings panel */
+    .settings {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 18px;
+      margin-bottom: 20px;
+    }
+
+    .settings-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .settings-header h2 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    .settings-header .toggle {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    .settings-body {
+      display: none;
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+    }
+
+    .settings-body.open { display: block; }
+
+    .settings-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+    }
+
+    .settings-grid label {
+      display: block;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .settings-grid input {
+      width: 100%;
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 10px;
+      color: var(--text);
+      font-size: 0.95rem;
+      font-family: inherit;
+    }
+
+    .settings-grid input:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+    }
+
+    .settings-actions {
+      margin-top: 12px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .info-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 18px;
+      margin-bottom: 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 10px;
+      font-size: 0.9rem;
+    }
+
+    .info-item { display: flex; flex-direction: column; gap: 2px; }
+    .info-item span:first-child { color: var(--text-muted); font-size: 0.78rem; }
+    .info-item strong { color: var(--accent); font-size: 1.05rem; }
+
+    .valves-grid { display: grid; gap: 12px; }
+
+    .valve-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .valve-card:hover {
+      background: var(--card-hover);
+      border-color: #475569;
+    }
+
+    .valve-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .valve-num {
+      font-size: 1.1rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .badge {
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .badge-in {
+      background: rgba(59, 130, 246, 0.2);
+      color: #60a5fa;
+      border: 1px solid rgba(59, 130, 246, 0.4);
+    }
+
+    .badge-ex {
+      background: rgba(239, 68, 68, 0.15);
+      color: #f87171;
+      border: 1px solid rgba(239, 68, 68, 0.35);
+    }
+
+    .nominal { font-size: 0.82rem; color: var(--text-muted); }
+
+    .inputs-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto;
+      gap: 12px;
+      align-items: end;
+    }
+
+    @media (max-width: 640px) {
+      .inputs-row { grid-template-columns: 1fr; }
+    }
+
+    label {
+      display: block;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    input[type="number"] {
+      width: 100%;
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 12px;
+      color: var(--text);
+      font-size: 1rem;
+      font-family: inherit;
+      transition: border-color 0.2s;
+    }
+
+    input[type="number"]:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+    }
+
+    input[type="number"]::placeholder { color: #64748b; }
+
+    .result-box {
+      min-width: 140px;
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 12px;
+      text-align: center;
+    }
+
+    .result-label { font-size: 0.72rem; color: var(--text-muted); margin-bottom: 2px; }
+    .result-value { font-size: 1.2rem; font-weight: 700; color: var(--success); }
+    .result-value.warning { color: var(--warning); }
+    .result-value.empty { color: var(--text-muted); font-size: 1rem; font-weight: 500; }
+    .result-exact { font-size: 0.72rem; color: var(--text-muted); margin-top: 2px; }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 22px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    button {
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 11px 22px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      font-family: inherit;
+    }
+
+    button:hover { background: var(--accent-hover); }
+    button:active { transform: scale(0.98); }
+
+    button.secondary {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    button.secondary:hover {
+      background: var(--card-hover);
+      border-color: #475569;
+    }
+
+    button.small {
+      padding: 7px 14px;
+      font-size: 0.85rem;
+    }
+
+    .summary {
+      margin-top: 26px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px;
+      display: none;
+    }
+
+    .summary h2 {
+      font-size: 1.1rem;
+      margin-bottom: 12px;
+      color: var(--accent);
+    }
+
+    .summary-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+
+    .summary-table th,
+    .summary-table td {
+      padding: 7px 10px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .summary-table th {
+      color: var(--text-muted);
+      font-weight: 500;
+      font-size: 0.78rem;
+    }
+
+    .summary-table tr:last-child td { border-bottom: none; }
+    .summary-table .need { color: var(--success); font-weight: 600; }
+
+    footer {
+      text-align: center;
+      margin-top: 28px;
+      padding: 14px;
+      color: var(--text-muted);
+      font-size: 0.78rem;
+    }
+
+    .tip {
+      margin-top: 18px;
+      padding: 12px 16px;
+      background: rgba(59, 130, 246, 0.08);
+      border: 1px solid rgba(59, 130, 246, 0.25);
+      border-radius: 10px;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    .tip strong { color: #93c5fd; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🔧 Калькулятор регулировочных шайб</h1>
+      <p>Двигатель ВАЗ-11183 (8 клапанов) · Холодный двигатель +20 °C</p>
+    </header>
+
+    <!-- Настройки -->
+    <div class="settings">
+      <div class="settings-header" onclick="toggleSettings()">
+        <h2>⚙️ Настройки</h2>
+        <span class="toggle" id="settings-toggle">показать ▼</span>
+      </div>
+      <div class="settings-body" id="settings-body">
+        <div class="settings-grid">
+          <div>
+            <label for="cfg-in">Номинал впуск, мм</label>
+            <input type="number" id="cfg-in" step="0.01" value="0.20">
+          </div>
+          <div>
+            <label for="cfg-ex">Номинал выпуск, мм</label>
+            <input type="number" id="cfg-ex" step="0.01" value="0.35">
+          </div>
+          <div>
+            <label for="cfg-min">Мин. шайба, мм</label>
+            <input type="number" id="cfg-min" step="0.05" value="2.00">
+          </div>
+          <div>
+            <label for="cfg-max">Макс. шайба, мм</label>
+            <input type="number" id="cfg-max" step="0.05" value="4.50">
+          </div>
+          <div>
+            <label for="cfg-step">Шаг шайб, мм</label>
+            <input type="number" id="cfg-step" step="0.01" value="0.05">
+          </div>
+        </div>
+        <div class="settings-actions">
+          <button class="small" onclick="applySettings()">Применить</button>
+          <button class="secondary small" onclick="resetSettings()">Сбросить</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Текущие параметры -->
+    <div class="info-box" id="info-box">
+      <div class="info-item">
+        <span>Впускные клапаны</span>
+        <strong id="info-in">0,20 мм</strong>
+      </div>
+      <div class="info-item">
+        <span>Выпускные клапаны</span>
+        <strong id="info-ex">0,35 мм</strong>
+      </div>
+      <div class="info-item">
+        <span>Диапазон шайб</span>
+        <strong id="info-range">2,00 – 4,50 мм</strong>
+      </div>
+      <div class="info-item">
+        <span>Шаг шайб</span>
+        <strong id="info-step">0,05 мм</strong>
+      </div>
+    </div>
+
+    <div class="valves-grid" id="valves"></div>
+
+    <div class="actions">
+      <button onclick="calculateAll()">Рассчитать все</button>
+      <button class="secondary" onclick="clearAll()">Очистить</button>
+      <button class="secondary" onclick="fillExample()">Пример</button>
+    </div>
+
+    <div class="summary" id="summary">
+      <h2>📋 Итоговый список шайб</h2>
+      <table class="summary-table">
+        <thead>
+          <tr>
+            <th>Клапан</th>
+            <th>Тип</th>
+            <th>Зазор</th>
+            <th>Старая</th>
+            <th>Расчёт</th>
+            <th>Нужна шайба</th>
+          </tr>
+        </thead>
+        <tbody id="summary-body"></tbody>
+      </table>
+    </div>
+
+    <div class="tip">
+      <strong>Как пользоваться:</strong><br>
+      1. При необходимости открой «Настройки» и задай свои номиналы / диапазон шайб.<br>
+      2. Измерь зазор щупом и толщину старой шайбы (маркировка или микрометр).<br>
+      3. Введи данные — расчёт идёт сразу. «Рассчитать все» даёт итоговую таблицу.<br>
+      4. Шайба ставится маркировкой вниз (к толкателю).
+    </div>
+
+    <footer>
+      Формула: Новая = Старая + Измеренный − Номинальный<br>
+      Порядок клапанов: от шкива ГРМ (1 — выпуск, 2 — впуск …)
+    </footer>
+  </div>
+
+  <script>
+    // ===== Конфигурация =====
+    const DEFAULTS = {
+      nominalIn: 0.20,
+      nominalEx: 0.35,
+      shimMin: 2.00,
+      shimMax: 4.50,
+      shimStep: 0.05
+    };
+
+    let cfg = { ...DEFAULTS };
+
+    const VALVE_DEFS = [
+      { num: 1, type: 'ex', name: 'Выпуск' },
+      { num: 2, type: 'in', name: 'Впуск' },
+      { num: 3, type: 'in', name: 'Впуск' },
+      { num: 4, type: 'ex', name: 'Выпуск' },
+      { num: 5, type: 'ex', name: 'Выпуск' },
+      { num: 6, type: 'in', name: 'Впуск' },
+      { num: 7, type: 'in', name: 'Впуск' },
+      { num: 8, type: 'ex', name: 'Выпуск' },
+    ];
+
+    function getNominal(type) {
+      return type === 'in' ? cfg.nominalIn : cfg.nominalEx;
+    }
+
+    function generateShimRange() {
+      const list = [];
+      const step = cfg.shimStep;
+      const min = cfg.shimMin;
+      const max = cfg.shimMax;
+      // защита от слишком мелкого шага
+      if (step <= 0 || step > 1) return [3.00];
+      for (let t = min; t <= max + step * 0.01; t += step) {
+        list.push(Math.round(t * 100) / 100);
+      }
+      return list;
+    }
+
+    let SHIMS = generateShimRange();
+
+    function nearestShim(value) {
+      if (isNaN(value)) return null;
+      // если совсем вне разумного диапазона — всё равно ищем ближайшую
+      if (SHIMS.length === 0) return null;
+      let best = SHIMS[0];
+      let bestDiff = Math.abs(value - best);
+      for (const s of SHIMS) {
+        const d = Math.abs(value - s);
+        if (d < bestDiff) {
+          best = s;
+          bestDiff = d;
+        }
+      }
+      return best;
+    }
+
+    function formatMm(v) {
+      return (Math.round(v * 100) / 100).toFixed(2).replace('.', ',');
+    }
+
+    // ===== UI =====
+    function toggleSettings() {
+      const body = document.getElementById('settings-body');
+      const toggle = document.getElementById('settings-toggle');
+      body.classList.toggle('open');
+      toggle.textContent = body.classList.contains('open') ? 'скрыть ▲' : 'показать ▼';
+    }
+
+    function updateInfoBox() {
+      document.getElementById('info-in').textContent = formatMm(cfg.nominalIn) + ' мм';
+      document.getElementById('info-ex').textContent = formatMm(cfg.nominalEx) + ' мм';
+      document.getElementById('info-range').textContent =
+        formatMm(cfg.shimMin) + ' – ' + formatMm(cfg.shimMax) + ' мм';
+      document.getElementById('info-step').textContent = formatMm(cfg.shimStep) + ' мм';
+    }
+
+    function applySettings() {
+      const parse = id => {
+        const v = parseFloat(document.getElementById(id).value.replace(',', '.'));
+        return isNaN(v) ? null : v;
+      };
+
+      const inNom = parse('cfg-in');
+      const exNom = parse('cfg-ex');
+      const minS  = parse('cfg-min');
+      const maxS  = parse('cfg-max');
+      const step  = parse('cfg-step');
+
+      if (inNom === null || exNom === null || minS === null || maxS === null || step === null) {
+        alert('Проверь значения в настройках');
+        return;
+      }
+      if (minS >= maxS) {
+        alert('Мин. шайба должна быть меньше макс.');
+        return;
+      }
+      if (step <= 0) {
+        alert('Шаг должен быть больше 0');
+        return;
+      }
+
+      cfg.nominalIn = inNom;
+      cfg.nominalEx = exNom;
+      cfg.shimMin   = minS;
+      cfg.shimMax   = maxS;
+      cfg.shimStep  = step;
+
+      SHIMS = generateShimRange();
+      updateInfoBox();
+      rebuildValveCards();
+      // пересчитать уже введённые данные
+      calculateAll();
+    }
+
+    function resetSettings() {
+      cfg = { ...DEFAULTS };
+      document.getElementById('cfg-in').value   = cfg.nominalIn;
+      document.getElementById('cfg-ex').value   = cfg.nominalEx;
+      document.getElementById('cfg-min').value  = cfg.shimMin;
+      document.getElementById('cfg-max').value  = cfg.shimMax;
+      document.getElementById('cfg-step').value = cfg.shimStep;
+      SHIMS = generateShimRange();
+      updateInfoBox();
+      rebuildValveCards();
+      calculateAll();
+    }
+
+    function createValveCard(v) {
+      const nom = getNominal(v.type);
+      const badgeClass = v.type === 'in' ? 'badge-in' : 'badge-ex';
+      return `
+        <div class="valve-card" data-num="${v.num}">
+          <div class="valve-header">
+            <div class="valve-num">
+              Клапан ${v.num}
+              <span class="badge ${badgeClass}">${v.name}</span>
+            </div>
+            <div class="nominal">номинал ${formatMm(nom)} мм</div>
+          </div>
+          <div class="inputs-row">
+            <div>
+              <label for="gap-${v.num}">Измеренный зазор, мм</label>
+              <input type="number" id="gap-${v.num}" step="0.01" min="0" max="2" placeholder="напр. 0,28">
+            </div>
+            <div>
+              <label for="old-${v.num}">Толщина старой шайбы, мм</label>
+              <input type="number" id="old-${v.num}" step="0.01" min="1.5" max="6" placeholder="напр. 3,75">
+            </div>
+            <div class="result-box">
+              <div class="result-label">Нужна шайба</div>
+              <div class="result-value empty" id="res-${v.num}">—</div>
+              <div class="result-exact" id="exact-${v.num}"></div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function rebuildValveCards() {
+      // сохраняем введённые значения
+      const saved = {};
+      VALVE_DEFS.forEach(v => {
+        const g = document.getElementById(`gap-${v.num}`);
+        const o = document.getElementById(`old-${v.num}`);
+        if (g && o) {
+          saved[v.num] = { gap: g.value, old: o.value };
+        }
+      });
+
+      const container = document.getElementById('valves');
+      container.innerHTML = VALVE_DEFS.map(createValveCard).join('');
+
+      VALVE_DEFS.forEach(v => {
+        const gap = document.getElementById(`gap-${v.num}`);
+        const old = document.getElementById(`old-${v.num}`);
+        if (saved[v.num]) {
+          gap.value = saved[v.num].gap;
+          old.value = saved[v.num].old;
+        }
+        [gap, old].forEach(el => el.addEventListener('input', () => calcOne(v.num)));
+      });
+    }
+
+    function parseNum(str) {
+      if (!str || str.trim() === '') return NaN;
+      return parseFloat(str.replace(',', '.'));
+    }
+
+    function calcOne(num) {
+      const v = VALVE_DEFS.find(x => x.num === num);
+      const gapEl = document.getElementById(`gap-${num}`);
+      const oldEl = document.getElementById(`old-${num}`);
+      const resEl = document.getElementById(`res-${num}`);
+      const exactEl = document.getElementById(`exact-${num}`);
+
+      const gap = parseNum(gapEl.value);
+      const old = parseNum(oldEl.value);
+      const nominal = getNominal(v.type);
+
+      if (isNaN(gap) || isNaN(old)) {
+        resEl.textContent = '—';
+        resEl.className = 'result-value empty';
+        exactEl.textContent = '';
+        return null;
+      }
+
+      const exact = old + gap - nominal;
+      const nearest = nearestShim(exact);
+
+      if (nearest === null) {
+        resEl.textContent = 'вне ряда';
+        resEl.className = 'result-value warning';
+        exactEl.textContent = `расчёт ${formatMm(exact)}`;
+        return { num, exact, nearest: null, gap, old, type: v.name };
+      }
+
+      const diff = Math.abs(exact - nearest);
+      resEl.textContent = formatMm(nearest) + ' мм';
+      resEl.className = diff > cfg.shimStep * 0.6 ? 'result-value warning' : 'result-value';
+      exactEl.textContent = `точно ${formatMm(exact)}`;
+
+      return { num, exact, nearest, gap, old, type: v.name };
+    }
+
+    function calculateAll() {
+      const results = [];
+      VALVE_DEFS.forEach(v => {
+        const r = calcOne(v.num);
+        if (r) results.push(r);
+      });
+
+      const summary = document.getElementById('summary');
+      const tbody = document.getElementById('summary-body');
+
+      if (results.length === 0) {
+        summary.style.display = 'none';
+        return;
+      }
+
+      tbody.innerHTML = results.map(r => `
+        <tr>
+          <td><strong>${r.num}</strong></td>
+          <td>${r.type}</td>
+          <td>${formatMm(r.gap)}</td>
+          <td>${formatMm(r.old)}</td>
+          <td>${formatMm(r.exact)}</td>
+          <td class="need">${r.nearest !== null ? formatMm(r.nearest) + ' мм' : '—'}</td>
+        </tr>
+      `).join('');
+
+      summary.style.display = 'block';
+    }
+
+    function clearAll() {
+      VALVE_DEFS.forEach(v => {
+        document.getElementById(`gap-${v.num}`).value = '';
+        document.getElementById(`old-${v.num}`).value = '';
+        document.getElementById(`res-${v.num}`).textContent = '—';
+        document.getElementById(`res-${v.num}`).className = 'result-value empty';
+        document.getElementById(`exact-${v.num}`).textContent = '';
+      });
+      document.getElementById('summary').style.display = 'none';
+    }
+
+    function fillExample() {
+      const example = [
+        { num: 1, gap: 0.42, old: 3.55 },
+        { num: 2, gap: 0.28, old: 3.70 },
+        { num: 3, gap: 0.18, old: 3.65 },
+        { num: 4, gap: 0.38, old: 3.60 },
+        { num: 5, gap: 0.45, old: 3.50 },
+        { num: 6, gap: 0.22, old: 3.75 },
+        { num: 7, gap: 0.31, old: 3.55 },
+        { num: 8, gap: 0.33, old: 3.80 },
+      ];
+      example.forEach(e => {
+        document.getElementById(`gap-${e.num}`).value = e.gap;
+        document.getElementById(`old-${e.num}`).value = e.old;
+      });
+      calculateAll();
+    }
+
+    // Старт
+    updateInfoBox();
+    rebuildValveCards();
+  </script>
+</body>
+</html>
