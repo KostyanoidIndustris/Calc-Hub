@@ -31,6 +31,16 @@ const CATEGORIES = [
     ],
   },
   {
+    id: "health",
+    icon: "❤️",
+    name: "Здоровье",
+    desc: "Расчёты для здоровья: индекс массы тела и другое.",
+    colors: ["#34d399", "#22d3ee"],
+    calculators: [
+      { name: "Индекс массы тела", icon: "⚖️", desc: "ИМТ с оценкой нормы по возрасту и полу, процент жира и обхват талии.", url: "calculators/bmi/index.html" },
+    ],
+  },
+  {
     id: "programming",
     icon: "💻",
     name: "Программирование",
