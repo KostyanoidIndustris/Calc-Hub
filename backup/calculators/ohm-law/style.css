@@ -1,0 +1,111 @@
+/* ============================================================
+   Закон Ома — специфичные стили
+   ============================================================ */
+
+.ohm-layout {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 22px;
+  align-items: start;
+}
+
+.panel-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+
+/* ---------- Сетка полей ---------- */
+.fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.field {
+  padding: 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.2);
+  transition: border-color .2s, box-shadow .2s, background .2s;
+}
+.field:focus-within {
+  border-color: rgba(34, 211, 238, 0.55);
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.1);
+}
+.field.result {
+  border-color: rgba(232, 121, 249, 0.45);
+  background: rgba(232, 121, 249, 0.06);
+}
+
+.field-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.sym {
+  display: grid;
+  place-items: center;
+  width: 30px; height: 30px;
+  border-radius: 9px;
+  font-family: "Cascadia Code", Consolas, monospace;
+  font-weight: 800;
+  font-size: 1rem;
+  color: #fff;
+  background: var(--grad);
+  box-shadow: 0 6px 16px rgba(129,140,248,.3);
+  flex-shrink: 0;
+}
+.fname { font-weight: 600; font-size: .95rem; }
+
+.field-input {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.field-input .input { flex: 1; font-size: 1.15rem; font-weight: 600; }
+.field.result .input { color: #f0abfc; }
+.unit { color: var(--text-faint); font-size: .9rem; min-width: 30px; }
+
+/* ---------- Действия и статус ---------- */
+.actions { display: flex; gap: 12px; margin-top: 18px; }
+.status {
+  min-height: 1.4em;
+  margin-top: 12px;
+  font-size: .9rem;
+  color: var(--text-muted);
+}
+.status.ok { color: #34d399; }
+.status.err { color: #fda4af; }
+
+/* ---------- Формулы ---------- */
+.formulas { position: sticky; top: 88px; }
+.formula-list {
+  list-style: none;
+  display: grid;
+  gap: 8px;
+  margin-top: 4px;
+}
+.formula-list li {
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: rgba(255,255,255,.03);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-family: "Cascadia Code", Consolas, monospace;
+  font-size: .9rem;
+}
+.formula-list b { color: var(--cyan); }
+.legend-hint { color: var(--text-faint); font-size: .8rem; margin-top: 14px; }
+
+/* ---------- Адаптивность ---------- */
+@media (max-width: 860px) {
+  .ohm-layout { grid-template-columns: 1fr; }
+  .formulas { position: static; }
+}
+@media (max-width: 420px) {
+  .fields { grid-template-columns: 1fr; }
+}

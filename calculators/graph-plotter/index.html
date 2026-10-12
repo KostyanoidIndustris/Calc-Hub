@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#07070d">
+  <meta name="description" content="Построитель графиков зависимостей: введи точки x и y — приложение само подберёт масштаб. Несколько зависимостей на одной сетке.">
+  <title>Построитель графиков — CalcHub</title>
+  <link rel="stylesheet" href="../shared/base.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Анимированный фон -->
+  <div class="bg" aria-hidden="true">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+    <div class="grid-overlay"></div>
+  </div>
+
+  <!-- Шапка -->
+  <header class="calc-header">
+    <a class="back-link" href="../../index.html">← CalcHub</a>
+    <div>
+      <p class="eyebrow">Инструменты</p>
+      <h1 class="calc-title">Построитель <span class="grad-text">графиков</span></h1>
+      <p class="calc-sub">
+        Введи точки (x, y) — масштаб подберётся автоматически. Можно строить
+        несколько зависимостей на одной сетке и настраивать оси вручную.
+      </p>
+    </div>
+  </header>
+
+  <main class="calc-page plotter">
+    <div class="plot-layout">
+      <!-- Левая колонка: данные и масштаб -->
+      <div class="col-controls">
+        <!-- Данные -->
+        <section class="panel">
+          <div class="panel-head">
+            <div>
+              <div class="panel-title">Данные</div>
+              <p class="panel-hint">Каждая зависимость — свой набор точек.</p>
+            </div>
+            <div class="panel-tools">
+              <button class="btn btn-ghost btn-sm" id="sampleBtn" type="button">Пример</button>
+              <button class="btn btn-ghost btn-sm" id="clearBtn" type="button">Очистить</button>
+            </div>
+          </div>
+
+          <!-- Список зависимостей -->
+          <div class="series-chips" id="seriesChips"></div>
+          <button class="btn btn-ghost btn-sm add-series" id="addSeriesBtn" type="button">＋ Добавить зависимость</button>
+
+          <!-- Активная зависимость -->
+          <div class="editor" id="editor">
+            <p class="legend-hint" id="editorEmpty" hidden>Добавь зависимость, чтобы начать.</p>
+            <div id="editorFields">
+              <div class="editor-row">
+                <div class="editor-name">
+                  <label class="field-label" for="editorName">Название</label>
+                  <input class="input" type="text" id="editorName" placeholder="Зависимость 1">
+                </div>
+                <div class="editor-color">
+                  <label class="field-label">Цвет</label>
+                  <div class="color-swatches" id="colorSwatches"></div>
+                </div>
+              </div>
+
+              <div class="editor-shape">
+                <label class="field-label">Форма точек</label>
+                <div class="shape-swatches" id="shapeSwatches"></div>
+              </div>
+
+              <label class="field-label">Точки</label>
+              <div class="table-wrap">
+                <table class="points-table">
+                  <thead>
+                    <tr><th>X</th><th>Y</th><th></th></tr>
+                  </thead>
+                  <tbody id="pointsBody"></tbody>
+                </table>
+              </div>
+              <button class="btn btn-ghost btn-sm add-point" id="addPointBtn" type="button">＋ Добавить точку</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Масштаб -->
+        <section class="panel">
+          <div class="panel-title">Масштаб</div>
+          <p class="panel-hint">«Авто» сам подберёт наилучший диапазон. Сними галочку, чтобы задать оси вручную.</p>
+          <div class="axis-names">
+            <div>
+              <label class="field-label" for="axisNameX">Название оси X</label>
+              <input class="input" type="text" id="axisNameX" value="x" placeholder="x">
+            </div>
+            <div>
+              <label class="field-label" for="axisNameY">Название оси Y</label>
+              <input class="input" type="text" id="axisNameY" value="y" placeholder="y">
+            </div>
+          </div>
+          <div class="scale-grid">
+            <div class="scale-row">
+              <span class="axis-name axis-x">X</span>
+              <label class="auto-toggle"><input type="checkbox" id="xAuto" checked> авто</label>
+              <input class="input" type="number" id="xMin" placeholder="мин" inputmode="decimal" disabled>
+              <input class="input" type="number" id="xMax" placeholder="макс" inputmode="decimal" disabled>
+            </div>
+            <div class="scale-row">
+              <span class="axis-name axis-y">Y</span>
+              <label class="auto-toggle"><input type="checkbox" id="yAuto" checked> авто</label>
+              <input class="input" type="number" id="yMin" placeholder="мин" inputmode="decimal" disabled>
+              <input class="input" type="number" id="yMax" placeholder="макс" inputmode="decimal" disabled>
+            </div>
+          </div>
+        </section>
+
+        <!-- Вид графика -->
+        <section class="panel">
+          <div class="panel-title">Вид графика</div>
+          <p class="panel-hint">Стиль оформления сетки, линий и цветов.</p>
+          <label class="field-label">Стиль</label>
+          <div class="segmented" id="themeToggle" role="tablist" aria-label="Стиль графика">
+            <button class="seg active" data-theme="dark" type="button">CalcHub</button>
+            <button class="seg" data-theme="excel" type="button">Excel</button>
+          </div>
+          <div class="opt-checks">
+            <label class="auto-toggle"><input type="checkbox" id="showGrid" checked> сетка</label>
+            <label class="auto-toggle"><input type="checkbox" id="showPoints" checked> точки</label>
+            <label class="auto-toggle"><input type="checkbox" id="showLegend" checked> легенда</label>
+          </div>
+        </section>
+      </div>
+
+      <!-- Правая колонка: график -->
+      <div class="col-chart">
+        <section class="panel chart-panel">
+          <div class="panel-head">
+            <div class="panel-title">График</div>
+            <div class="panel-tools">
+              <button class="btn btn-ghost btn-sm" id="dlPng" type="button">PNG</button>
+              <button class="btn btn-ghost btn-sm" id="dlJpeg" type="button">JPEG</button>
+            </div>
+          </div>
+          <div class="plot-wrap" id="plotWrap">
+            <canvas id="plot"></canvas>
+          </div>
+          <p class="legend-hint">Клик по элементу легенды на графике — скрыть/показать зависимость.</p>
+        </section>
+      </div>
+    </div>
+
+    <section class="tip">
+      <strong>Как пользоваться:</strong>
+      <ol>
+        <li>Введи значения <strong>X</strong> и <strong>Y</strong> — точки сразу появятся на графике.</li>
+        <li>«Добавить зависимость» создаёт ещё одну линию на той же сетке (X копируется из текущей — удобно для общего X и разного Y).</li>
+        <li>Масштаб подбирается автоматически; при необходимости задай «мин/макс» осей вручную.</li>
+      </ol>
+    </section>
+
+    <footer class="calc-footer">
+      Свой движок отрисовки (Canvas) · работает офлайн · без внешних библиотек
+    </footer>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

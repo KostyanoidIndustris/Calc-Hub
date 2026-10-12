@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#07070d">
+  <meta name="description" content="Калькулятор SMD-кодов: резисторы, конденсаторы и индуктивности в одном — расшифровка маркировки.">
+  <title>SMD-коды — CalcHub</title>
+  <link rel="stylesheet" href="../shared/base.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Анимированный фон -->
+  <div class="bg" aria-hidden="true">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+    <div class="grid-overlay"></div>
+  </div>
+
+  <!-- Шапка -->
+  <header class="calc-header">
+    <a class="back-link" href="../../index.html">← CalcHub</a>
+    <div>
+      <p class="eyebrow">Электроника</p>
+      <h1 class="calc-title">SMD-<span class="grad-text">коды</span></h1>
+      <p class="calc-sub">
+        Расшифровка маркировки SMD-компонентов: резисторы, конденсаторы
+        и индуктивности — всё в одном калькуляторе.
+      </p>
+    </div>
+  </header>
+
+  <main class="calc-page smd-page">
+    <!-- Выбор типа компонента -->
+    <div class="segmented smd-tabs" id="smdTabs" role="tablist" aria-label="Тип компонента">
+      <button class="seg active" data-tab="resistor" type="button" role="tab">Резисторы</button>
+      <button class="seg" data-tab="capacitor" type="button" role="tab">Конденсаторы</button>
+      <button class="seg" data-tab="inductor" type="button" role="tab">Индуктивности</button>
+    </div>
+
+    <!-- Панель ввода -->
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <div class="panel-title" id="smdTitle">Резисторы</div>
+          <p class="panel-hint" id="smdHint">Введи код, напечатанный на корпусе.</p>
+        </div>
+      </div>
+
+      <label class="field-label" for="smdInput">Код на корпусе</label>
+      <input class="input smd-input" type="text" id="smdInput" placeholder="например, 103"
+             autocomplete="off" spellcheck="false" autocapitalize="characters" inputmode="text">
+
+      <div class="chips" id="smdExamples" aria-label="Примеры кодов"></div>
+
+      <div class="smd-result" id="smdResult">
+        <span class="smd-empty">Введи код — значение появится здесь</span>
+      </div>
+    </section>
+
+    <!-- Подсказка -->
+    <section class="tip">
+      <strong>Форматы маркировки:</strong>
+      <ul class="tip-list" id="smdTipList"></ul>
+    </section>
+
+    <footer class="calc-footer">
+      Маркировка на корпусе → значение и номинал · работает офлайн
+    </footer>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

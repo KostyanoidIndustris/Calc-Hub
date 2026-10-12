@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#07070d">
+  <meta name="description" content="CalcHub — коллекция удобных калькуляторов на все случаи жизни: автомобиль, электроника, финансы, здоровье и многое другое.">
+  <title>CalcHub — калькуляторы на все случаи жизни</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Кастомный курсор -->
+  <div class="cursor-dot" aria-hidden="true"></div>
+  <div class="cursor-ring" aria-hidden="true"></div>
+
+  <!-- Анимированный фон -->
+  <div class="bg" aria-hidden="true">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+    <div class="grid-overlay"></div>
+    <div class="noise"></div>
+  </div>
+
+  <!-- Шапка -->
+  <header class="header">
+    <a class="logo" href="#top">
+      <span class="logo-mark">∑</span>
+      Calc<span class="logo-accent">Hub</span>
+    </a>
+    <nav class="nav" aria-label="Основная навигация">
+      <a class="nav-link" href="#categories">Категории</a>
+      <a class="nav-link" href="#about">О проекте</a>
+    </nav>
+    <div class="header-cta">
+      <a class="btn btn-ghost" href="#categories">Начать</a>
+    </div>
+  </header>
+
+  <main id="top">
+    <div id="homeView">
+    <!-- Герой -->
+    <section class="hero">
+      <span class="badge">
+        <span class="badge-pulse"></span>
+        доступно <strong id="heroCount">0</strong> калькуляторов · без регистрации
+      </span>
+      <h1 class="hero-title">
+        Считай <span class="grad-text">мгновенно</span>,<br>
+        живи <span class="grad-text grad-text-2">проще</span>
+      </h1>
+      <p class="hero-sub">
+        CalcHub — это коллекция точных и удобных калькуляторов.
+        От закона Ома до построения графиков — всё в одном месте.
+      </p>
+
+      <!-- Поиск -->
+      <form class="search" role="search" id="searchForm">
+        <span class="search-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="7"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </span>
+        <input id="searchInput" class="search-input" type="text"
+               placeholder="Найти калькулятор… (например, «Ом» или «график»)"
+               autocomplete="off" spellcheck="false">
+        <button class="search-clear" id="searchClear" type="button" aria-label="Очистить поиск" hidden>✕</button>
+        <kbd class="search-kbd">/</kbd>
+      </form>
+
+      <!-- Быстрые подсказки -->
+      <div class="chips" id="quickChips" aria-label="Быстрые подсказки"></div>
+    </section>
+
+    <!-- Статистика -->
+    <section class="stats" aria-label="Статистика">
+      <div class="stat">
+        <span class="stat-num" id="statCats" data-count="0">0</span>
+        <span class="stat-label">категорий</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <span class="stat-num" id="statCalcs" data-count="0">0</span>
+        <span class="stat-label">калькуляторов</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <span class="stat-num">100<span class="stat-pct">%</span></span>
+        <span class="stat-label">бесплатно</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <span class="stat-num">0</span>
+        <span class="stat-label">регистраций</span>
+      </div>
+    </section>
+
+    <!-- Категории -->
+    <section class="categories" id="categories">
+      <div class="section-head">
+        <p class="eyebrow">Разделы</p>
+        <h2 class="section-title">Выбери <span class="grad-text">категорию</span></h2>
+        <p class="section-sub">
+          Каждая категория содержит набор тематических калькуляторов.
+          Кликни по карточке — скоро здесь появятся вкладки с инструментами.
+        </p>
+      </div>
+
+      <div class="grid" id="categoryGrid"></div>
+      <p class="empty-state" id="emptyState" hidden>Ничего не нашлось. Попробуй другой запрос 🤔</p>
+    </section>
+
+    <!-- О проекте -->
+    <section class="about" id="about">
+      <div class="about-card">
+        <p class="eyebrow">Что дальше</p>
+        <h2 class="section-title">Это только <span class="grad-text">начало</span></h2>
+        <p class="section-sub">
+          Коллекция растёт: уже доступны маркировка резисторов, закон Ома,
+          регулировочные шайбы клапанов и построитель графиков.
+          Новые разделы и калькуляторы добавляются по мере готовности.
+        </p>
+        <div class="about-tags">
+          <span class="tag">Без регистрации</span>
+          <span class="tag">Работает офлайн</span>
+          <span class="tag">Без рекламы</span>
+          <span class="tag">Точные формулы</span>
+        </div>
+      </div>
+    </section>
+    </div>
+
+    <!-- Категория (подвкладки) -->
+    <section class="view" id="categoryView" hidden>
+      <div class="view-head">
+        <button class="back-link" id="categoryBack" type="button">← Все категории</button>
+      </div>
+      <div id="categoryHeader"></div>
+      <div class="calc-list" id="categoryList"></div>
+    </section>
+
+    <!-- Калькулятор (встроенный) -->
+    <section class="view" id="calculatorView" hidden>
+      <div class="view-head">
+        <button class="back-link" id="calculatorBack" type="button">← Назад</button>
+        <span class="breadcrumb" id="calculatorCrumb"></span>
+      </div>
+      <div class="frame-wrap">
+        <iframe id="calculatorFrame" title="Калькулятор"></iframe>
+      </div>
+    </section>
+  </main>
+
+  <!-- Подвал -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <a class="logo logo-sm" href="#top">
+        <span class="logo-mark">∑</span>
+        Calc<span class="logo-accent">Hub</span>
+      </a>
+      <p class="footer-note">Сделано с заботой о твоём времени. <span id="year"></span> © CalcHub</p>
+    </div>
+  </footer>
+
+  <!-- Всплывающее уведомление -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
