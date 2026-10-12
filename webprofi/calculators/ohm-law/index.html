@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#07070d">
+  <meta name="description" content="Калькулятор закона Ома: введи любые два параметра — напряжение, ток, сопротивление или мощность — остальные рассчитаются автоматически.">
+  <title>Закон Ома — CalcHub</title>
+  <link rel="stylesheet" href="../shared/base.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Анимированный фон -->
+  <div class="bg" aria-hidden="true">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+    <div class="grid-overlay"></div>
+  </div>
+
+  <!-- Шапка -->
+  <header class="calc-header">
+    <a class="back-link" href="../../index.html">← CalcHub</a>
+    <div>
+      <p class="eyebrow">Электроника</p>
+      <h1 class="calc-title">Закон <span class="grad-text">Ома</span></h1>
+      <p class="calc-sub">
+        Введи любые два параметра — напряжение, ток, сопротивление или мощность —
+        и нажми «Рассчитать».
+      </p>
+    </div>
+  </header>
+
+  <main class="calc-page ohm-page">
+    <div class="ohm-layout">
+      <!-- Параметры -->
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">Параметры</div>
+            <p class="panel-hint">Заполни ровно два поля и нажми «Рассчитать».</p>
+          </div>
+        </div>
+
+        <div class="fields">
+          <div class="field" data-key="v">
+            <div class="field-head">
+              <span class="sym">U</span>
+              <span class="fname">Напряжение</span>
+            </div>
+            <div class="field-input">
+              <input class="input" type="text" id="in-v" placeholder="0" inputmode="decimal">
+              <span class="unit">В</span>
+            </div>
+          </div>
+
+          <div class="field" data-key="i">
+            <div class="field-head">
+              <span class="sym">I</span>
+              <span class="fname">Ток</span>
+            </div>
+            <div class="field-input">
+              <input class="input" type="text" id="in-i" placeholder="0" inputmode="decimal">
+              <span class="unit">А</span>
+            </div>
+          </div>
+
+          <div class="field" data-key="r">
+            <div class="field-head">
+              <span class="sym">R</span>
+              <span class="fname">Сопротивление</span>
+            </div>
+            <div class="field-input">
+              <input class="input" type="text" id="in-r" placeholder="0" inputmode="decimal">
+              <span class="unit">Ом</span>
+            </div>
+          </div>
+
+          <div class="field" data-key="p">
+            <div class="field-head">
+              <span class="sym">P</span>
+              <span class="fname">Мощность</span>
+            </div>
+            <div class="field-input">
+              <input class="input" type="text" id="in-p" placeholder="0" inputmode="decimal">
+              <span class="unit">Вт</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="btn btn-primary" id="calcBtn" type="button">Рассчитать</button>
+          <button class="btn btn-ghost" id="clearBtn" type="button">Очистить</button>
+        </div>
+        <p class="status" id="status" role="status" aria-live="polite"></p>
+      </section>
+
+      <!-- Формулы -->
+      <aside class="panel formulas">
+        <div class="panel-title">Формулы</div>
+        <ul class="formula-list">
+          <li><b>U</b> = I × R</li>
+          <li><b>I</b> = U ÷ R</li>
+          <li><b>R</b> = U ÷ I</li>
+          <li><b>P</b> = U × I</li>
+        </ul>
+        <p class="legend-hint">Значения с запятой тоже подойдут (например, «0,25»).</p>
+      </aside>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
