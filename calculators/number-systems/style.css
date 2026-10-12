@@ -1,0 +1,156 @@
+/* ============================================================
+   Системы счисления — специфичные стили
+   ============================================================ */
+
+.ns-page { max-width: 1120px; margin: 0 auto; }
+
+/* ---------- Ввод ---------- */
+.ns-input-row {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+.ns-value {
+  font-family: "Cascadia Code", Consolas, monospace;
+  font-size: 1.3rem;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+.select-sm { padding: 8px 32px 8px 10px; font-size: .9rem; width: auto; }
+
+/* ---------- Раскладка ---------- */
+.ns-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+  align-items: start;
+}
+.ns-target {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-faint);
+  font-size: .85rem;
+}
+
+/* ---------- Шаги расчёта ---------- */
+.ns-steps { display: flex; flex-direction: column; gap: 20px; }
+.ns-placeholder { color: var(--text-faint); font-size: .95rem; }
+
+.ns-big {
+  font-family: "Cascadia Code", Consolas, monospace;
+  font-size: clamp(1.3rem, 3vw, 1.7rem);
+  font-weight: 700;
+  color: var(--text);
+  word-break: break-all;
+  line-height: 1.4;
+}
+.ns-big .accent {
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.ns-step-title {
+  font-size: .8rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--cyan);
+  margin-bottom: 8px;
+}
+.ns-block {
+  padding: 14px 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: rgba(0, 0, 0, 0.2);
+}
+.ns-formula {
+  font-family: "Cascadia Code", Consolas, monospace;
+  font-size: .92rem;
+  color: var(--text-muted);
+  line-height: 1.8;
+  word-break: break-all;
+}
+.ns-formula b { color: var(--text); font-weight: 700; }
+.ns-formula .eq { color: var(--fuchsia); }
+
+.ns-div {
+  font-family: "Cascadia Code", Consolas, monospace;
+  font-size: .9rem;
+  color: var(--text-muted);
+  display: grid;
+  gap: 4px;
+}
+.ns-div .rem { color: #fbbf24; font-weight: 700; }
+.ns-result-line {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--border);
+  font-family: "Cascadia Code", Consolas, monospace;
+  font-size: .95rem;
+  color: var(--text);
+}
+.ns-result-line b { color: #34d399; }
+
+/* ---------- Таблица систем ---------- */
+.ns-table-wrap { max-height: 620px; overflow-y: auto; }
+.ns-table { width: 100%; border-collapse: collapse; font-size: .9rem; }
+.ns-table th, .ns-table td {
+  padding: 8px 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  vertical-align: middle;
+}
+.ns-table th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: #10111b;
+  color: var(--text-faint);
+  font-weight: 600;
+  font-size: .75rem;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+.ns-table tbody tr:hover { background: rgba(255, 255, 255, 0.03); }
+.ns-table tbody tr:last-child td { border-bottom: none; }
+.ns-table .b-num {
+  font-family: "Cascadia Code", Consolas, monospace;
+  font-weight: 700;
+  color: var(--text);
+  width: 64px;
+}
+.ns-table .b-name { color: var(--text-muted); white-space: nowrap; }
+.ns-table .b-val {
+  font-family: "Cascadia Code", Consolas, monospace;
+  font-weight: 600;
+  color: var(--cyan);
+  word-break: break-all;
+}
+.ns-table tr.common .b-num { color: #fbbf24; }
+.ns-table tr.common .b-val { color: #fbbf24; }
+.ns-badge {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 7px;
+  border-radius: 999px;
+  font-size: .66rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  color: #67e8f9;
+  background: rgba(34, 211, 238, 0.12);
+  border: 1px solid rgba(34, 211, 238, 0.35);
+}
+
+/* ---------- Адаптивность ---------- */
+@media (max-width: 900px) {
+  .ns-layout { grid-template-columns: 1fr; }
+  .ns-table-wrap { max-height: 460px; }
+}
+@media (max-width: 560px) {
+  .ns-input-row { grid-template-columns: 1fr; }
+  .actions { flex-wrap: wrap; }
+}
